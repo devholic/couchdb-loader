@@ -28,7 +28,7 @@ rl.question("Database Address : ", function(answer) {
 
 function load(address, dbname){
 	// GET Request를 서버로 보냄
-	http.get("http://"+address+"/_changes?feed=continuous", function(response) {
+	http.get("http://"+address+"/_changes?include_docs=true&feed=continuous", function(response) {
  		response.on('data', function (data) { // 데이터가 있는 경우
  			try{
 				var json = JSON.parse(data);
