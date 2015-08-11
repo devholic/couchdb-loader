@@ -1,6 +1,5 @@
 var fs = require('fs');
 var request = require('request');
-var requestify = require('requestify');
 
 var count = 0;
 var dir = './backup';
