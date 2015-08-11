@@ -1,7 +1,10 @@
+var exec = require('child_process').exec;
 var fs = require('fs');
 var http = require('http');
+var moment = require('moment');
 var schedule = require('node-schedule');
 var readline = require('readline');
+var sys = require('sys')
 
 // last_seq 변수 선언 : 중복 처리 위함
 var last_seq = -1;
@@ -28,13 +31,20 @@ function initBackup(){
 		fs.mkdirSync('./backup');
 	}catch(e){}
 	var j = schedule.scheduleJob('30 * * * *', function(){
-		uploadToGit();
+		gitCommit();
 	});
+	gitCommit();
 	load();
 }
 
-function uploadToGit(){
+function gitCommit(){
 	// TODO
+	fs.writeFile('./git.sh', '#!/bin/bash\ngit add .\ngit commit -m \"\ngit push'+moment().format('YYYYMMDDhhmm')+'\"', function(err) {
+    if(err) {
+        return console.log(err);
+    }
+	exec("bash ./git.sh", puts);
+	});
 }
 
 function load(){
@@ -83,4 +93,8 @@ function load(){
 	}).on('close', function(e) { // Connection이 끊긴 경우
   		load();
 	});
+}
+
+function puts(error, stdout, stderr){
+	sys.puts(stdout);
 }
